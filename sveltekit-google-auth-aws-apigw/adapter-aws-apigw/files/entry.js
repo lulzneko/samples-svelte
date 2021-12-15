@@ -4,17 +4,17 @@ import { init, render } from '../output/server/app.js';
 init();
 
 export async function handler(event) {
-  const { path, httpMethod, headers, rawQuery, body, isBase64Encoded } = event;
+  const { rawPath, requestContext, headers, rawQueryString, body, isBase64Encoded } = event;
 
-  const query = new URLSearchParams(rawQuery);
+  const query = new URLSearchParams(rawQueryString);
 
   const encoding = isBase64Encoded ? 'base64' : headers['content-encoding'] || 'utf-8';
   const rawBody = typeof body === 'string' ? Buffer.from(body, encoding) : body;
 
   const rendered = await render({
-    method: httpMethod,
+    method: requestContext.http.method,
     headers,
-    path,
+    path: rawPath,
     query,
     rawBody
   });
