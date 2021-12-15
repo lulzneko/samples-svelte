@@ -27,5 +27,11 @@
       "$lib/*": ["src/lib/*"]
     }
   },
-  "include": ["src/**/*.d.ts", "src/**/*.js", "src/**/*.ts", "src/**/*.svelte"]
+  "ts-node": {
+    "transpileOnly": true,
+    "moduleTypes": {
+      "serverless-config.ts": "cjs"
+    }
+  },
+  "include": ["*.ts", "src/**/*.d.ts", "src/**/*.js", "src/**/*.ts", "src/**/*.svelte"]
 }
