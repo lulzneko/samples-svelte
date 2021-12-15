@@ -30,7 +30,8 @@ export default function (options) {
         outfile: '.aws-apigw/functions-internal/__render.js',
         bundle: true,
         inject: [join(files, 'shims.js')],
-        platform: 'node'
+        platform: 'node',
+        minify: true
       };
 
       const build_options =
