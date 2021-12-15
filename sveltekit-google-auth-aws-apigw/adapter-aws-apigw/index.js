@@ -10,7 +10,7 @@ import esbuild from 'esbuild';
 /** @type {import('.')} */
 export default function (options) {
   return {
-    name: '@sveltejs/adapter-netlify',
+    name: '@sveltejs/adapter-aws-apigw',
 
     async adapt({ utils }) {
       const publish = 'build';
@@ -22,12 +22,12 @@ export default function (options) {
       const files = fileURLToPath(new URL('./files', import.meta.url));
 
       utils.log.minor('Generating serverless function...');
-      utils.copy(join(files, 'entry.js'), '.svelte-kit/netlify/entry.js');
+      utils.copy(join(files, 'entry.js'), '.svelte-kit/aws-apigw/entry.js');
 
       /** @type {BuildOptions} */
       const default_options = {
-        entryPoints: ['.svelte-kit/netlify/entry.js'],
-        outfile: '.netlify/functions-internal/__render.js',
+        entryPoints: ['.svelte-kit/aws-apigw/entry.js'],
+        outfile: '.aws-apigw/functions-internal/__render.js',
         bundle: true,
         inject: [join(files, 'shims.js')],
         platform: 'node'
@@ -38,7 +38,7 @@ export default function (options) {
 
       await esbuild.build(build_options);
 
-      writeFileSync(join('.netlify', 'package.json'), JSON.stringify({ type: 'commonjs' }));
+      writeFileSync(join('.aws-apigw', 'package.json'), JSON.stringify({ type: 'commonjs' }));
 
       utils.log.minor('Prerendering static pages...');
       await utils.prerender({
