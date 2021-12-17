@@ -50,6 +50,13 @@ module.exports = ((): Serverless => ({
         }
       },
 
+      SvelteKitCloudFrontOriginAccessIdentity: {
+        Type: 'AWS::CloudFront::CloudFrontOriginAccessIdentity',
+        Properties: {
+          CloudFrontOriginAccessIdentityConfig: { Comment: name }
+        }
+      },
+
       SvelteKitSsrApiGatewayOriginRequestPolicy: {
         Type: "AWS::CloudFront::OriginRequestPolicy",
         Properties: {
