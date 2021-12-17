@@ -10,6 +10,24 @@ module.exports = ((): Serverless => ({
     runtime: 'nodejs14.x',
   },
 
+  plugins: [
+    'serverless-s3-deploy'
+  ],
+
+  custom: {
+    assets: {
+      auto: true,
+      targets: [{
+        bucket: { Ref: 'SvelteKitStaticContentsBucket' },
+        empty: true,
+        files: [{
+          source: 'build',
+          globs: '**'
+        }]
+      }]
+    }
+  },
+
   package: {
     individually: true,
     patterns: [
