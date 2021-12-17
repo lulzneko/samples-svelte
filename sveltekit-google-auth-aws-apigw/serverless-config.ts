@@ -97,6 +97,23 @@ module.exports = ((): Serverless => ({
             PriceClass: 'PriceClass_200',
             CustomErrorResponses: [
               { ErrorCode: 404, ResponseCode: 200, ResponsePagePath: '/' }
+            ],
+            DefaultCacheBehavior: {
+              TargetOriginId: 'SvelteKitSsrApiGatewayOrigin',
+              Compress: true,
+              ViewerProtocolPolicy: 'redirect-to-https',
+              AllowedMethods: [ 'GET', 'HEAD', 'OPTIONS', 'PUT', 'PATCH', 'POST', 'DELETE' ],
+              CachePolicyId: '4135ea2d-6df8-44a3-9df3-4b5a84be39ad', // Managed-CachingDisabled
+              OriginRequestPolicyId: { Ref: 'SvelteKitSsrApiGatewayOriginRequestPolicy' }
+            },
+            Origins: [
+              {
+                Id: 'SvelteKitSsrApiGatewayOrigin',
+                DomainName: { "Fn::Join": [ ".", [{ Ref: 'HttpApi' }, 'execute-api', { Ref: 'AWS::Region' }, { Ref: 'AWS::URLSuffix' }]]},
+                CustomOriginConfig: {
+                  OriginProtocolPolicy: 'https-only'
+                }
+              }
             ]
           }
         }
