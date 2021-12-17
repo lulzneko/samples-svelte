@@ -10,6 +10,24 @@ module.exports = ((): Serverless => ({
     runtime: 'nodejs14.x',
   },
 
+  plugins: [
+    'serverless-s3-deploy'
+  ],
+
+  custom: {
+    assets: {
+      auto: true,
+      targets: [{
+        bucket: { Ref: 'SvelteKitStaticContentsBucket' },
+        empty: true,
+        files: [{
+          source: 'build',
+          globs: '**'
+        }]
+      }]
+    }
+  },
+
   package: {
     individually: true,
     patterns: [
@@ -29,6 +47,34 @@ module.exports = ((): Serverless => ({
 
   resources: {
     Resources: {
+      SvelteKitStaticContentsBucket: {
+        Type: 'AWS::S3::Bucket', Properties: {}
+      },
+
+      SvelteKitStaticContentsBucketPolicy: {
+        Type: 'AWS::S3::BucketPolicy',
+        Properties: {
+          Bucket: { Ref: 'SvelteKitStaticContentsBucket' },
+          PolicyDocument: {
+            Statement: [{
+              Effect: 'Allow',
+              Action: [ 's3:GetObject' ],
+              Resource: { 'Fn::Join': [ '/', [{ 'Fn::GetAtt': [ 'SvelteKitStaticContentsBucket', 'Arn' ]}, '*' ]]},
+              Principal: {
+                CanonicalUser: { 'Fn::GetAtt': [ 'SvelteKitCloudFrontOriginAccessIdentity', 'S3CanonicalUserId' ]}
+              }
+            }]
+          }
+        }
+      },
+
+      SvelteKitCloudFrontOriginAccessIdentity: {
+        Type: 'AWS::CloudFront::CloudFrontOriginAccessIdentity',
+        Properties: {
+          CloudFrontOriginAccessIdentityConfig: { Comment: name }
+        }
+      },
+
       SvelteKitSsrApiGatewayOriginRequestPolicy: {
         Type: "AWS::CloudFront::OriginRequestPolicy",
         Properties: {
