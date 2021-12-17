@@ -85,6 +85,55 @@ module.exports = ((): Serverless => ({
             CookiesConfig: { CookieBehavior: 'all' }
           }
         }
+      },
+
+      SvelteKitDistribution: {
+        Type: 'AWS::CloudFront::Distribution',
+        Properties: {
+          DistributionConfig: {
+            Comment: name,
+            Enabled: true,
+            HttpVersion: 'http2',
+            PriceClass: 'PriceClass_200',
+            CustomErrorResponses: [
+              { ErrorCode: 404, ResponseCode: 200, ResponsePagePath: '/' }
+            ],
+            DefaultCacheBehavior: {
+              TargetOriginId: 'SvelteKitSsrApiGatewayOrigin',
+              Compress: true,
+              ViewerProtocolPolicy: 'redirect-to-https',
+              AllowedMethods: [ 'GET', 'HEAD', 'OPTIONS', 'PUT', 'PATCH', 'POST', 'DELETE' ],
+              CachePolicyId: '4135ea2d-6df8-44a3-9df3-4b5a84be39ad', // Managed-CachingDisabled
+              OriginRequestPolicyId: { Ref: 'SvelteKitSsrApiGatewayOriginRequestPolicy' }
+            },
+            CacheBehaviors: [
+              {
+                TargetOriginId: 'SvelteKitStaticContentsBucketOrigin',
+                PathPattern: '/_app/*',
+                Compress: true,
+                ViewerProtocolPolicy: 'redirect-to-https',
+                AllowedMethods: [ 'GET', 'HEAD' ],
+                CachePolicyId: '658327ea-f89d-4fab-a63d-7e88639e58f6' // Managed-CachingOptimized
+              }
+            ],
+            Origins: [
+              {
+                Id: 'SvelteKitSsrApiGatewayOrigin',
+                DomainName: { "Fn::Join": [ ".", [{ Ref: 'HttpApi' }, 'execute-api', { Ref: 'AWS::Region' }, { Ref: 'AWS::URLSuffix' }]]},
+                CustomOriginConfig: {
+                  OriginProtocolPolicy: 'https-only'
+                }
+              },
+              {
+                Id: 'SvelteKitStaticContentsBucketOrigin',
+                DomainName: { 'Fn::GetAtt': [ 'SvelteKitStaticContentsBucket', 'DomainName' ]},
+                S3OriginConfig: {
+                  OriginAccessIdentity: { 'Fn::Join': [ '/', [ 'origin-access-identity/cloudfront', { Ref: 'SvelteKitCloudFrontOriginAccessIdentity' }]]}
+                }
+              }
+            ]
+          }
+        }
       }
     }
   }
