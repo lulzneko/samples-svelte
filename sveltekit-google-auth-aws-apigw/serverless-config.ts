@@ -25,5 +25,21 @@ module.exports = ((): Serverless => ({
         { httpApi: { method: '*', path: '*' }}
       ]
     }
+  },
+
+  resources: {
+    Resources: {
+      SvelteKitSsrApiGatewayOriginRequestPolicy: {
+        Type: "AWS::CloudFront::OriginRequestPolicy",
+        Properties: {
+          OriginRequestPolicyConfig: {
+            Name: 'SvelteKitSsrApiGatewayOriginRequestPolicy',
+            HeadersConfig: { HeaderBehavior : 'none' },
+            QueryStringsConfig: { QueryStringBehavior: 'all' },
+            CookiesConfig: { CookieBehavior: 'all' }
+          }
+        }
+      }
+    }
   }
 }))();
