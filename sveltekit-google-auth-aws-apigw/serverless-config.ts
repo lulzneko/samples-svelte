@@ -85,6 +85,21 @@ module.exports = ((): Serverless => ({
             CookiesConfig: { CookieBehavior: 'all' }
           }
         }
+      },
+
+      SvelteKitDistribution: {
+        Type: 'AWS::CloudFront::Distribution',
+        Properties: {
+          DistributionConfig: {
+            Comment: name,
+            Enabled: true,
+            HttpVersion: 'http2',
+            PriceClass: 'PriceClass_200',
+            CustomErrorResponses: [
+              { ErrorCode: 404, ResponseCode: 200, ResponsePagePath: '/' }
+            ]
+          }
+        }
       }
     }
   }
