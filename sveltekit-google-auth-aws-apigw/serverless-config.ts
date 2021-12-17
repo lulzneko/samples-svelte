@@ -29,6 +29,10 @@ module.exports = ((): Serverless => ({
 
   resources: {
     Resources: {
+      SvelteKitStaticContentsBucket: {
+        Type: 'AWS::S3::Bucket', Properties: {}
+      },
+
       SvelteKitSsrApiGatewayOriginRequestPolicy: {
         Type: "AWS::CloudFront::OriginRequestPolicy",
         Properties: {
