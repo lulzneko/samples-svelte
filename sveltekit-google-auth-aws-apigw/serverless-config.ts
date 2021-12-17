@@ -33,6 +33,23 @@ module.exports = ((): Serverless => ({
         Type: 'AWS::S3::Bucket', Properties: {}
       },
 
+      SvelteKitStaticContentsBucketPolicy: {
+        Type: 'AWS::S3::BucketPolicy',
+        Properties: {
+          Bucket: { Ref: 'SvelteKitStaticContentsBucket' },
+          PolicyDocument: {
+            Statement: [{
+              Effect: 'Allow',
+              Action: [ 's3:GetObject' ],
+              Resource: { 'Fn::Join': [ '/', [{ 'Fn::GetAtt': [ 'SvelteKitStaticContentsBucket', 'Arn' ]}, '*' ]]},
+              Principal: {
+                CanonicalUser: { 'Fn::GetAtt': [ 'SvelteKitCloudFrontOriginAccessIdentity', 'S3CanonicalUserId' ]}
+              }
+            }]
+          }
+        }
+      },
+
       SvelteKitSsrApiGatewayOriginRequestPolicy: {
         Type: "AWS::CloudFront::OriginRequestPolicy",
         Properties: {
