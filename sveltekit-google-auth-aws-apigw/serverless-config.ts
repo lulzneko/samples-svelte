@@ -95,9 +95,6 @@ module.exports = ((): Serverless => ({
             Enabled: true,
             HttpVersion: 'http2',
             PriceClass: 'PriceClass_200',
-            CustomErrorResponses: [
-              { ErrorCode: 404, ResponseCode: 200, ResponsePagePath: '/' }
-            ],
             DefaultCacheBehavior: {
               TargetOriginId: 'SvelteKitSsrApiGatewayOrigin',
               Compress: true,
