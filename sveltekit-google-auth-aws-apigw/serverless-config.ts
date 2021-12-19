@@ -132,6 +132,9 @@ module.exports = ((): Serverless => ({
           }
         }
       }
+    },
+    Outputs: {
+      SvelteKitDistribution: { Value: { 'Fn::GetAtt': [ 'SvelteKitDistribution', 'DomainName' ]}}
     }
   }
 }))();
