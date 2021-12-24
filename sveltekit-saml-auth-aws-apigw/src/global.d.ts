@@ -2,7 +2,9 @@
 
 interface ImportMetaEnv {
   VITE_JWT_SECRET: string;
-  VITE_GOOGLE_OAUTH_CLIENT_ID: string;
-  VITE_GOOGLE_OAUTH_CLIENT_SECRET: string;
-  VITE_CALLBACK_URI_FOR_CLOUDFRONT: string;
+  VITE_SAML_ENTRY_POINT: string;
+  VITE_SAML_CALLBACK_URL: string;
+  VITE_SAML_ISSUER: string;
+  VITE_SAML_AUDIENCE: string;
+  VITE_SAML_CERT: string;
 }
