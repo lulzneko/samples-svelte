@@ -5,7 +5,7 @@
   $: user = $session.user;
 
   function signIn() {
-    location.assign('/api/auth/signin/google?redirect=/');
+    location.assign('/api/auth/signin/saml?RelayState=/');
   }
 
   function signOut() {
@@ -15,9 +15,8 @@
 
 
 {#if !user}
-  <button on:click="{signIn}">サインイン with Google</button>
+  <button on:click="{signIn}">サインイン with SAML</button>
 {:else}
   <h2>Hello {user.name} !!</h2>
-  <p><img src={user.picture} alt="{user.name} icon" /></p>
   <button on:click={signOut}>サインアウト</button>
 {/if}
