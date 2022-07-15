@@ -23,7 +23,7 @@
     "serverless": "^2.69.0",
     "serverless-s3-deploy": "^0.10.1",
     "sk-auth": "^0.3.7",
-    "svelte": "^3.44.0",
+    "svelte": "^3.49.0",
     "svelte-check": "^2.2.6",
     "svelte-preprocess": "^4.9.4",
     "ts-node": "^10.4.0",
